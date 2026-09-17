@@ -2,6 +2,8 @@ import { defineConfig } from "vitepress";
 import sidebar from "./generated-sidebar.mjs";
 import { processTerm, tokenize } from "./search-language.mjs";
 
+const siteBase = process.env.DOCS_BASE || "/";
+
 const escapeHtml = (value) => String(value)
   .replaceAll("&", "&amp;")
   .replaceAll("<", "&lt;")
@@ -10,6 +12,7 @@ const escapeHtml = (value) => String(value)
 export default defineConfig({
   title: "Code: Terraform",
   description: "Searchable player documentation for Code: Terraform",
+  base: siteBase,
   cleanUrls: true,
   lastUpdated: false,
   themeConfig: {

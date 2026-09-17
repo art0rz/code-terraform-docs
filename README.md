@@ -26,8 +26,12 @@ The importer validates all Markdown entries before replacing `docs/generated`. I
 ## Updating from a new game export
 
 1. Replace `Code-Terraform-DOCS-Manual.md`.
-2. Run `npm run docs:build`.
-3. If the game adds or removes entries, update the expected entry count in `scripts/import-manual.mjs` after reviewing the change.
+2. Commit the updated export.
+3. Push `main` to GitHub.
+
+The GitHub Pages workflow installs dependencies, validates and imports the manual, builds the site with the repository base path, and publishes it. No generated files need to be committed.
+
+If the game adds or removes entries, update the expected entry count in `scripts/import-manual.mjs` after reviewing the change.
 
 Never edit files in `docs/generated` or the generated sidebar directly; the next import replaces them.
 
@@ -46,3 +50,9 @@ Edit `scripts/search-aliases.mjs` to add page-specific vocabulary. Edit `docs/.v
 ## Generated output
 
 The production site is written to `docs/.vitepress/dist` by `npm run docs:build`.
+
+## GitHub Pages setup
+
+The workflow in `.github/workflows/deploy-pages.yml` deploys every push to `main`. Once the repository is on GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**. This is a one-time repository setting.
+
+Local builds use `/` as the site base. The deployment workflow automatically uses `/<repository-name>/`, so project-site links work without hard-coding an owner or repository name.
