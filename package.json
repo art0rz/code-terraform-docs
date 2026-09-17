@@ -1,0 +1,14 @@
+{
+  "name": "code-terraform-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "import": "node scripts/import-manual.mjs",
+    "docs:dev": "npm run import && vitepress docs",
+    "docs:build": "npm run import && vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

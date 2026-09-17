@@ -1,0 +1,8 @@
+.idea
+node_modules/
+Code-Terraform-DOCS-Manual.html
+docs/generated/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/.vitepress/generated-sidebar.mjs
+docs/.vitepress/manual-manifest.json

@@ -1,0 +1,55 @@
+:root {
+  --vp-c-brand-1: #208a5d;
+  --vp-c-brand-2: #19734d;
+  --vp-c-brand-3: #135c3e;
+  --vp-c-brand-soft: rgba(32, 138, 93, 0.14);
+  --vp-font-family-mono: "IBM Plex Mono", "Fira Code", Consolas, monospace;
+}
+
+.dark {
+  --vp-c-brand-1: #6fdda1;
+  --vp-c-brand-2: #51c78a;
+  --vp-c-brand-3: #39a870;
+  --vp-c-brand-soft: rgba(111, 221, 161, 0.14);
+}
+
+.doc-breadcrumb {
+  color: var(--vp-c-text-2);
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+}
+
+.vp-doc th {
+  text-align: left;
+}
+
+.vp-doc h5 {
+  border-top: 1px solid var(--vp-c-divider);
+  font-family: var(--vp-font-family-mono);
+  font-size: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+}
+
+.vp-doc code {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --vp-layout-max-width: 1560px;
+  }
+
+  .VPDoc:not(.has-sidebar) .container,
+  .VPDoc.has-aside .content-container {
+    max-width: 900px;
+  }
+}
