@@ -2,6 +2,10 @@
 
 A searchable static documentation site generated from the game's exported manual.
 
+<a href="https://art0rz.github.io/code-terraform-docs/">
+  <img src="https://img.shields.io/badge/Open_the_searchable_documentation-0969da?style=for-the-badge" alt="Open the searchable documentation" height="48">
+</a>
+
 ## Requirements
 
 - Node.js 26.8.2 (selected by `.tool-versions`)
