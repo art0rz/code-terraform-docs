@@ -77,6 +77,28 @@ function pageDescription(body) {
   return paragraph.slice(0, 180);
 }
 
+function normalizeHeadingLevels(body) {
+  let fence;
+
+  return body.split("\n").map((line) => {
+    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
+    if (fenceMatch) {
+      const marker = fenceMatch[1];
+      if (!fence) {
+        fence = { character: marker[0], length: marker.length };
+      } else if (marker[0] === fence.character && marker.length >= fence.length) {
+        fence = undefined;
+      }
+      return line;
+    }
+
+    if (fence) return line;
+    if (line.startsWith("##### ")) return `### ${line.slice(6)}`;
+    if (line.startsWith("### ")) return `## ${line.slice(4)}`;
+    return line;
+  }).join("\n");
+}
+
 function frontmatter(entry, build, searchTerms, description) {
   return [
     "---",
@@ -200,6 +222,9 @@ async function main() {
     // The game export uses `preview` for console-output examples. Shiki does
     // not define that language, so render those deliberately as plain text.
     source.body = source.body.replace(/^```preview\s*$/gm, "```text");
+    // Exported pages skip from h1 to h3, then from h3 to h5. Normalize those
+    // levels so sections and API members form an accessible h1/h2/h3 tree.
+    source.body = normalizeHeadingLevels(source.body);
     const outputPath = path.join(generatedRoot, entry.relativePath);
     const breadcrumb = [entry.section, entry.group].filter(Boolean).join(" · ");
     const searchTerms = extractSearchTerms(entry, source.body);

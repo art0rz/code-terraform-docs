@@ -31,7 +31,7 @@
   text-align: left;
 }
 
-.vp-doc h5 {
+.vp-doc h3 {
   border-top: 1px solid var(--vp-c-divider);
   font-family: var(--vp-font-family-mono);
   font-size: 1rem;
