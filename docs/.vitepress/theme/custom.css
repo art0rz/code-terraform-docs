@@ -22,6 +22,40 @@
   text-transform: uppercase;
 }
 
+.doc-meta {
+  align-items: center;
+  border-top: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  gap: 0.35rem 1rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+}
+
+.doc-meta a {
+  font-weight: 600;
+}
+
+.home-doc-meta {
+  margin: 2rem auto 0;
+  max-width: 1152px;
+  width: calc(100% - 48px);
+}
+
+@media (min-width: 640px) {
+  .home-doc-meta {
+    width: calc(100% - 96px);
+  }
+}
+
+@media (min-width: 960px) {
+  .home-doc-meta {
+    width: calc(100% - 128px);
+  }
+}
+
 .vp-doc table {
   display: table;
   width: 100%;
