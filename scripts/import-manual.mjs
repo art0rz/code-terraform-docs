@@ -9,6 +9,14 @@ const generatedRoot = path.join(projectRoot, "docs", "generated");
 const sidebarPath = path.join(projectRoot, "docs", ".vitepress", "generated-sidebar.mjs");
 const manifestPath = path.join(projectRoot, "docs", ".vitepress", "manual-manifest.json");
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 function slugify(value) {
   return value
     .normalize("NFKD")
@@ -155,24 +163,43 @@ async function writeSectionIndexes(entries, build) {
 
   for (const [section, sectionEntries] of Object.entries(sections)) {
     const groups = Object.groupBy(sectionEntries, (entry) => entry.group || section);
+    const groupCount = Object.keys(groups).length;
     const content = [
       "---",
       `title: ${JSON.stringify(section)}`,
       `description: ${JSON.stringify(`Browse the ${section} section of the Code: Terraform manual.`)}`,
       `manualBuild: ${JSON.stringify(build)}`,
       "search: false",
-      "outline: [2, 2]",
+      "outline: false",
       "---",
       "",
       `# ${section}`,
+      "",
+      `<p class="section-summary">${sectionEntries.length} ${sectionEntries.length === 1 ? "entry" : "entries"} across ${groupCount} ${groupCount === 1 ? "group" : "groups"}.</p>`,
+      "",
+      '<div class="section-grid">',
       ""
     ];
 
     for (const [group, groupEntries] of Object.entries(groups)) {
-      content.push(`## ${group}`, "");
-      for (const entry of groupEntries) content.push(`- [${entry.title}](${entry.url})`);
-      content.push("");
+      const groupId = slugify(group);
+      const sectionPrefix = `/generated/${slugify(section)}/`;
+      content.push(
+        `<section class="section-card" aria-labelledby="${groupId}">`,
+        '  <div class="section-card-header">',
+        `    <h2 id="${groupId}">${escapeHtml(group)}</h2>`,
+        `    <span class="section-card-count">${groupEntries.length} ${groupEntries.length === 1 ? "entry" : "entries"}</span>`,
+        "  </div>",
+        '  <ul class="section-card-links">'
+      );
+      for (const entry of groupEntries) {
+        const relativeUrl = entry.url.slice(sectionPrefix.length);
+        content.push(`    <li><a href="${relativeUrl}">${escapeHtml(entry.title)}</a></li>`);
+      }
+      content.push("  </ul>", "</section>", "");
     }
+
+    content.push("</div>", "");
 
     const outputPath = path.join(generatedRoot, slugify(section), "index.md");
     await mkdir(path.dirname(outputPath), { recursive: true });
