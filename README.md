@@ -27,6 +27,10 @@ npm run docs:preview
 
 The importer validates all Markdown entries before replacing `docs/generated`. It then writes 367 entry pages, section landing pages, the nested sidebar, and a machine-readable manifest.
 
+It also adds conservative cross-links for uniquely resolved page titles, types, functions, properties, and methods. Code blocks, headings, existing links, raw HTML, ambiguous names, and repeated references to the same target are left untouched. Return annotations are the exception: each resolvable return type is linked, including the single documented inner type in expressions such as `list<CropJob>`. Cross-link statistics and conflicts are recorded in the generated manifest.
+
+Edit `scripts/cross-link-overrides.mjs` when an otherwise ambiguous title has a reliable destination within a particular manual section.
+
 ## Updating from a new game export
 
 1. Replace `Code-Terraform-DOCS-Manual.md`.
