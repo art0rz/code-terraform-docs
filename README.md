@@ -39,7 +39,7 @@ Edit `scripts/cross-link-overrides.mjs` when an otherwise ambiguous title has a 
 
 The GitHub Pages workflow installs dependencies, validates and imports the manual, builds the site with the repository base path, and publishes it. No generated files need to be committed.
 
-If the game adds or removes entries, update the expected entry count in `scripts/import-manual.mjs` after reviewing the change.
+The importer compares the parsed pages with the export's Contents list, so game updates can add or remove entries without requiring a script change. A truncated or structurally inconsistent export still fails validation.
 
 Never edit files in `docs/generated` or the generated sidebar directly; the next import replaces them.
 

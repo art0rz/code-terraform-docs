@@ -59,6 +59,33 @@ function extractMarkdownEntries(markdown) {
   });
 }
 
+function extractMarkdownContents(markdown) {
+  const lines = markdown.replaceAll("\r\n", "\n").split("\n");
+  const contentsIndex = lines.findIndex((line) => line.trim() === "## Contents");
+  if (contentsIndex === -1) throw new Error("Could not find the Markdown contents list.");
+
+  const entries = [];
+  let section;
+
+  for (const line of lines.slice(contentsIndex + 1)) {
+    if (/^\*[^*]+\*$/.test(line)) break;
+
+    const sectionMatch = line.match(/^\*\*([^*]+)\*\*$/);
+    if (sectionMatch) {
+      section = sectionMatch[1];
+      continue;
+    }
+
+    const entryMatch = line.match(/^- (.+)$/);
+    if (!entryMatch) continue;
+    if (!section) throw new Error(`Contents entry has no section: ${entryMatch[1]}`);
+    entries.push(`${section} / ${entryMatch[1]}`);
+  }
+
+  if (entries.length === 0) throw new Error("The Markdown contents list is empty.");
+  return entries;
+}
+
 function extractSearchTerms(entry, body) {
   const terms = new Set([
     entry.section,
@@ -221,21 +248,43 @@ function entriesFromMarkdown(markdownEntries) {
   });
 }
 
-function validateMarkdown(markdownEntries) {
-  const expected = 367;
-  if (markdownEntries.length !== expected) {
-    throw new Error(`Expected ${expected} Markdown entries; found ${markdownEntries.length}.`);
-  }
-
+function validateMarkdown(markdown, markdownEntries) {
   for (const [index, entry] of markdownEntries.entries()) {
     if (!entry.title || !entry.eyebrow) throw new Error(`Entry ${index} is missing a title or hierarchy marker.`);
+  }
+
+  const contentsEntries = extractMarkdownContents(markdown);
+  const pageEntries = markdownEntries.map((entry) => `${entry.eyebrow} / ${entry.title}`);
+  const difference = (expected, actual) => {
+    const remaining = new Map();
+    for (const entry of actual) remaining.set(entry, (remaining.get(entry) ?? 0) + 1);
+    return expected.filter((entry) => {
+      const count = remaining.get(entry) ?? 0;
+      if (count === 0) return true;
+      remaining.set(entry, count - 1);
+      return false;
+    });
+  };
+  const missing = difference(contentsEntries, pageEntries);
+  const unexpected = difference(pageEntries, contentsEntries);
+  if (missing.length || unexpected.length) {
+    const details = [
+      missing.length ? `missing pages: ${missing.slice(0, 5).join(", ")}` : "",
+      unexpected.length ? `pages absent from Contents: ${unexpected.slice(0, 5).join(", ")}` : ""
+    ].filter(Boolean).join("; ");
+    throw new Error(`Contents/page mismatch (${details}).`);
+  }
+
+  const orderMismatch = pageEntries.findIndex((entry, index) => entry !== contentsEntries[index]);
+  if (orderMismatch !== -1) {
+    throw new Error(`Contents/page order mismatch at entry ${orderMismatch}: expected ${contentsEntries[orderMismatch]}, found ${pageEntries[orderMismatch]}.`);
   }
 }
 
 async function main() {
   const markdown = await readFile(markdownPath, "utf8");
   const markdownEntries = extractMarkdownEntries(markdown);
-  validateMarkdown(markdownEntries);
+  validateMarkdown(markdown, markdownEntries);
 
   const build = extractMarkdownBuild(markdown);
   const entries = entriesFromMarkdown(markdownEntries);
