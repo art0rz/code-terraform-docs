@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Typecheck scripts
+        run: npm run typecheck
+
       - name: Build documentation
         env:
           DOCS_BASE: /${{ github.event.repository.name }}/

@@ -1,6 +1,6 @@
 // Hand-written vocabulary that bridges player language and API terminology.
 // These aliases are added to the search index only; they are not rendered.
-export const titleAliases = {
+export const titleAliases: Readonly<Record<string, readonly string[]>> = {
   "Batteries & Charging": ["recharge", "refill battery", "vehicle power"],
   Battery: ["charge", "charging", "recharge", "power storage"],
   "Command Results": ["return value", "status message", "error result"],
@@ -19,7 +19,7 @@ export const titleAliases = {
   "Vehicle Proximity & Service": ["park vehicle", "repair", "refuel", "service area"]
 };
 
-export const groupAliases = {
+export const groupAliases: Readonly<Record<string, readonly string[]>> = {
   Components: ["machine", "hardware", "component api"],
   Database: ["catalog", "recipe", "item data"],
   Guide: ["tutorial", "how to", "help"],

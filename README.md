@@ -29,7 +29,7 @@ The importer validates all Markdown entries before replacing `docs/generated`. I
 
 It also adds conservative cross-links for uniquely resolved page titles, types, functions, properties, and methods. Code blocks, headings, existing links, raw HTML, ambiguous names, and repeated references to the same target are left untouched. Return annotations are the exception: each resolvable return type is linked, including the single documented inner type in expressions such as `list<CropJob>`. Cross-link statistics and conflicts are recorded in the generated manifest.
 
-Edit `scripts/cross-link-overrides.mjs` when an otherwise ambiguous title has a reliable destination within a particular manual section.
+Edit `scripts/cross-link-overrides.ts` when an otherwise ambiguous title has a reliable destination within a particular manual section.
 
 ## Updating from a new game export
 
@@ -53,7 +53,7 @@ Search is built into the static site and works without a server-side search serv
 - extracted method names, statuses, types, and other inline code terms;
 - a small curated vocabulary mapping player phrasing such as `recharge` to documented terms such as `charge` and `charging`.
 
-Edit `scripts/search-aliases.mjs` to add page-specific vocabulary. Edit `docs/.vitepress/search-language.mjs` to add query-time synonyms or tokenization behavior.
+Edit `scripts/search-aliases.ts` to add page-specific vocabulary. Edit `docs/.vitepress/search-language.mjs` to add query-time synonyms or tokenization behavior.
 
 ## Generated output
 

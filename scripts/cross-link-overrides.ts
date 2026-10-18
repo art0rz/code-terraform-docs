@@ -1,7 +1,7 @@
 // Ambiguous page titles that have a clear meaning inside a particular manual
 // section. Leave a title out when the correct destination still depends on
 // sentence-level context.
-export const contextualTitleOverrides = {
+export const contextualTitleOverrides: Readonly<Record<string, Readonly<Record<string, string>>>> = {
   Components: {
     "Data Archive": "/generated/components/logistics-and-orders/data-archive",
     "Earth Orders": "/generated/components/logistics-and-orders/earth-orders",
