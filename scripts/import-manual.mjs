@@ -48,7 +48,8 @@ function extractMarkdownEntries(markdown) {
 
   return starts.map((start, index) => {
     const end = starts[index + 1]?.eyebrowIndex ?? lines.length;
-    const rawTitle = lines[start.headingIndex].slice(3).trim();
+    // Headings may wrap identifiers in inline code; the Contents list does not.
+    const rawTitle = lines[start.headingIndex].slice(3).replaceAll("`", "").trim();
     const badgeMatch = rawTitle.match(/\s+\*\(([^)]+)\)\*$/);
     return {
       eyebrow: lines[start.eyebrowIndex].slice(1, -1),
